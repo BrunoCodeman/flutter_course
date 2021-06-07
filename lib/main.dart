@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_basics/answer.dart';
+import './question.dart';
+import './answer.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,13 +13,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final questions = [
+    {
+      "questionText": "What's your favorite colour?",
+      "answers": ["Blue", "Black", "White"]
+    },
+    {
+      "questionText": "What's your favorite animal?",
+      "answers": ["Cat", "Dog", "Capybara"]
+    },
+  ];
   var _questionIndex = 0;
   void _addAnswer() {
     setState(() {
-      _questionIndex += 1;
+      _questionIndex = _questionIndex == 0 ? 1 : 0;
     });
-
-    print(_questionIndex);
   }
 
   @override
@@ -27,17 +37,15 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text("My App"),
         ),
-        body: Column(
-          children: [
-            Text(_questionIndex.toString()),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: ElevatedButton(
-                onPressed: _addAnswer,
-                child: Text("+"),
-              ),
-            )
-          ],
+        body: Container(
+          child: Column(children: [
+            Question(questions[_questionIndex]["questionText"] as String),
+            // ... funciona como em JS: separa a lista em items individuais
+            ...(questions[_questionIndex]["answers"] as List<String>)
+                .map((answer) {
+              return Answer(_addAnswer, answer);
+            }).toList()
+          ]),
         ),
       ),
     );
