@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_basics/answer.dart';
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,7 +22,7 @@ class _MyAppState extends State<MyApp> {
       "answers": ["Cat", "Dog", "Capybara"]
     },
     {
-      "questionText": "What's your drink?",
+      "questionText": "What's your favorite drink?",
       "answers": ["Juice", "Wine", "Milk"]
     }
   ];
@@ -42,23 +41,13 @@ class _MyAppState extends State<MyApp> {
           title: Text("My App"),
         ),
         body: Container(
-          child: _questionIndex >= questions.length
-              ? Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text("No more questions",
-                      style: TextStyle(
-                        fontSize: 16,
-                      )),
-                )
-              : Column(children: [
-                  Question(questions[_questionIndex]["questionText"] as String),
-                  // ... funciona como em JS: separa a lista em items individuais
-                  ...(questions[_questionIndex]["answers"] as List<String>)
-                      .map((answer) {
-                    return Answer(_addAnswer, answer);
-                  }).toList()
-                ]),
-        ),
+            child: _questionIndex >= questions.length
+                ? Result()
+                : Quiz(
+                    answerQuestion: _addAnswer,
+                    questionIndex: _questionIndex,
+                    questions: this.questions,
+                  )),
       ),
     );
   }
